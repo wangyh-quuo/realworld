@@ -1,0 +1,60 @@
+# workflow 名称
+name: realworld-CI/CD
+
+# workflow 触发条件
+on:
+  push:
+    tags:
+      - 'v*'
+
+# 执行的任务
+jobs:
+  # job名称
+  deploy:
+    # 运行环境
+    runs-on: CentOS 8.3
+    steps:
+
+    # 克隆代码
+    - name: Checkout
+      uses: actions/checkout@main
+
+    # 打包
+    - name：Build
+      uses：actions/setup-node@main
+    - run: npm install
+    - run: npm run build
+    - run: tar -zcvf release.tgz .nuxt static nuxt.config.js package.json package-lock.json ecosystem.config.js
+    
+    # 发布
+    - name: Release
+      id: create_release
+      uses: actions/create-release@master
+      env: 
+        GITHUB_TOKEN: ${{ secrets.REALWORLD }}
+      with: 
+        tag_name: ${{ github.ref }} 
+        release_name: Release ${{ github.ref }} 
+        draft: false 
+        prerelease: false
+    # 上传
+    - name: Upload Release Asset 
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@master 
+      env:
+        GITHUB_TOKEN: ${{ secrets.REALWORLD }}
+        with: upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release.tgz 
+        asset_name: release.tgz 
+        asset_content_type: application/x-tgz
+    
+    # 部署
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }} 
+        username: ${{ secrets.USERNAME }} 
+        password: ${{ secrets.PASSWORD }} 
+        port: ${{ secrets.PORT }}
+        script: | 
+        cd /root/pm2-test wget https://github.com/wangyh-quuo/realworld/releases/latest/download/release.tgz -O release.tgz tar zxvf release.tgz npm install --production pm2 reload ecosystem.config.js
