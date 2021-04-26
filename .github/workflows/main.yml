@@ -20,8 +20,8 @@ jobs:
       uses: actions/checkout@main
 
     # 打包
-    - name：Build
-      uses：actions/setup-node@main
+    - name: Build
+      uses: actions/setup-node@main
     - run: npm install
     - run: npm run build
     - run: tar -zcvf release.tgz .nuxt static nuxt.config.js package.json package-lock.json ecosystem.config.js
