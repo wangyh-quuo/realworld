@@ -58,4 +58,8 @@ jobs:
         password: ${{ secrets.PASSWORD }} 
         port: ${{ secrets.PORT }}
         script: | 
-        cd /home/wangyh wget https://github.com/wangyh-quuo/realworld/releases/latest/download/release.tgz -O release.tgz tar zxvf release.tgz npm install --production pm2 reload ecosystem.config.js
+          cd /home/wangyh 
+          wget https://github.com/wangyh-quuo/realworld/releases/latest/download/release.tgz -O release.tgz 
+          tar zxvf release.tgz 
+          npm install --production 
+          pm2 reload ecosystem.config.js
