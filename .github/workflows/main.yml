@@ -58,7 +58,7 @@ jobs:
         password: ${{ secrets.PASSWORD }} 
         port: ${{ secrets.PORT }}
         script: | 
-          cd /root/lagouhomework 
+          cd /root/lagou-homework 
           wget https://github.com/wangyh-quuo/realworld/releases/latest/download/release.tgz -O release.tgz 
           tar zxvf release.tgz 
           npm install --production 
