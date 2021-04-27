@@ -12,7 +12,7 @@ jobs:
   # job名称
   deploy:
     # 运行环境
-    runs-on: CentOS 8.3
+    runs-on: ubuntu-latest
     steps:
 
     # 克隆代码
